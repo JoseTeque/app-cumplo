@@ -1,0 +1,49 @@
+$backgroundcolorBoton: rgba(247, 243, 7, 0.438);
+$background-color-boton-hover: rgba(189, 186, 33, 0.925);
+$backgroundcolorDatePicker: rgb(74, 117, 74);
+
+div.contenedor{
+    margin-bottom: 30px;
+    form{
+
+        .form{
+            display: grid ;
+            grid-template-columns: repeat(3, 1fr);
+            margin-right: 20px;
+            justify-content: center;
+            width: 100%;
+            .fechas{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                label{
+                    color: white;
+                    font-size: 20px;
+                    padding-right: 10px;
+                    font-weight: bold;
+                }
+                .datepiker{
+                    background-color:$backgroundcolorDatePicker;
+                    font-size: 18px;
+                }
+            }
+            .btn{
+                display: inline-block;
+                width: 50%;
+                background-color: $backgroundcolorBoton;
+                padding: 5px;
+                color: white;
+                border-radius: 10px;
+                text-transform: uppercase;
+                font-weight: bold;
+                text-align: center;
+            }
+            .btn:hover{
+                cursor: pointer;
+                background-color: $background-color-boton-hover;
+            }
+            
+        }
+    }
+}
