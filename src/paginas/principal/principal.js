@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../../componentes/header/Header";
-import "../componentes/App/app.scss";
+import "./principal.scss";
 import DateForm from "../../componentes/DateForm/DateForm";
 import Grafica from "../../componentes/grafica/Grafica";
 import moment from "moment";

@@ -1,0 +1,11 @@
+
+.text-center{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    .Error_Text{
+        color: white;
+    }
+}
