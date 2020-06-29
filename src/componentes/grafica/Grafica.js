@@ -6,9 +6,10 @@ class Grafica extends React.Component{
     render(){
         const {data, opciones , maximo , minimo , promedio} = this.props;
         return(
-            <div className="contenedor-grafica">
                  <div className="grafica"  >
-                    <Bar  data={data}  options={opciones}/>
+
+                        <Bar  data={data}  options={opciones}/>
+
                     <div className="resultados">
                         <div className="contenido-resultados">
                             <p >Valor Máximo: <span> $ {maximo}</span></p>
@@ -23,8 +24,6 @@ class Grafica extends React.Component{
                         </div>
                     </div>
                 </div>
-
-            </div>
 
         )
     }

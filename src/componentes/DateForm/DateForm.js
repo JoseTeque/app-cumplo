@@ -1,7 +1,7 @@
 import React from 'react'
 import DatePicker from 'react-date-picker'
 import './dateform.scss'
-import moment from 'moment'
+
 
 export default class DateForm extends React.Component {
 

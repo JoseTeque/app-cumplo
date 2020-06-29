@@ -5,6 +5,10 @@ import DateForm from "../../componentes/DateForm/DateForm";
 import Grafica from "../../componentes/grafica/Grafica";
 import moment from "moment";
 import config from "../../config";
+import NotFound from '../../paginas/error404/Error404'
+import Loading from '../../componentes/loading/Loading'
+import FatalError from '../error500/Error500'
+import { Bar } from "react-chartjs-2";
 
 export default class App extends React.Component {
   state = {
@@ -31,15 +35,35 @@ export default class App extends React.Component {
     diafinal: 0,
     mesfinal: 0,
     anofinal: 0,
+    mensaje: '',
+    loading:false,
+    error: ''
   };
 
   async peticion() {
     try {
+
+      this.setState({
+        loading:true
+      })
+
       let peticion = await fetch(
         `${config["url"]}/${this.state.anoInicial}/${this.state.mesInicial}/dias_i/${this.state.diaInicial}/${this.state.anofinal}/${this.state.mesfinal}/dias_f/${this.state.diafinal}?apikey=${config["apikey"]}&formato=json`
       );
 
       let respuesta = await peticion.json();
+      console.log(respuesta)
+
+      if(respuesta['CodigoHTTP'] === 404){
+
+        this.setState({
+          mensaje: respuesta['Mensaje'],
+          loading:false
+        })
+
+        return;
+      }
+
       let fechas = [],
         valores = [];
       this.setState({ respuesta: respuesta["Dolares"] });
@@ -50,7 +74,17 @@ export default class App extends React.Component {
       });
 
       this.setState({ fecha: fechas, valor: valores });
-    } catch (error) {}
+
+      this.setState({
+        loading:false
+      })
+
+    } catch (error) {
+      this.setState({
+        loading:false,
+        error
+      })
+    }
   }
 
   generarCaracter() {
@@ -95,6 +129,7 @@ export default class App extends React.Component {
 
   configurarGrafica() {
     const data = {
+      type:Bar,
       labels: this.state.fecha,
       datasets: [
         {
@@ -108,6 +143,7 @@ export default class App extends React.Component {
     };
     const opciones = {
       responsive: true,
+      maintainAspectRatio:false,
       title: {
         display: true,
         text: "RANGO DEL DÓLAR",
@@ -130,7 +166,7 @@ export default class App extends React.Component {
 
       if (this.state.valor[i] > maximo) {
         maximo = this.state.valor[i];
-        if (i == 0) {
+        if (i === 0) {
           minimo = this.state.valor[i];
         }
       } else if (this.state.valor[i] < minimo) {
@@ -173,23 +209,42 @@ export default class App extends React.Component {
   };
 
   render() {
-    return (
-      <React.Fragment>
-        <Header />
-        <DateForm
-          dateIncial={this.state.dateInicial}
-          dateFinal={this.state.dateFinal}
-          onSubmit={this.handleSubmit}
-          onchange={this.handleChange}
-        />
-        <Grafica
-          maximo={this.state.maximo}
-          minimo={this.state.minimo}
-          promedio={this.state.promedio}
-          data={this.state.data}
-          opciones={this.state.opciones}
-        />
-      </React.Fragment>
-    );
+
+    if(this.state.loading){
+     return <Loading />
+    }
+
+    if(this.state.error){
+      return <FatalError />
+    }
+
+    if(this.state.mensaje === ''){
+      return (
+        
+        <React.Fragment>
+          <Header />
+          <DateForm
+            dateIncial={this.state.dateInicial}
+            dateFinal={this.state.dateFinal}
+            onSubmit={this.handleSubmit}
+            onchange={this.handleChange}
+          />
+          <Grafica
+            maximo={this.state.maximo}
+            minimo={this.state.minimo}
+            promedio={this.state.promedio}
+            data={this.state.data}
+            opciones={this.state.opciones}
+          />
+        </React.Fragment>
+      );
+    }else{
+      return(
+        <NotFound mensaje={this.state.mensaje}/>
+      )
+      
+    }
+      
+    }
+  
   }
-}
